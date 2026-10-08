@@ -22,46 +22,32 @@
   <link href="v11.css" rel="stylesheet"/>
   
 <style>
-/* One moving, continuous stripe field. The planet itself does not spin as a flat disk. */
+/* Seam-free globe: the sphere does NOT rotate like a flat disk. */
 .hero-visual .planet {
   animation: none !important;
   transform: none !important;
 }
 
-/* The broad texture extends beyond the clipping circle, so its edge never enters view. */
-.hero-visual .planet-inner {
+/* A transparent canvas contains the mathematical front hemisphere's texture.
+   The original radial shading, circular silhouette and orbital rings stay fixed. */
+.hero-visual canvas.planet-inner {
+  display: block;
   position: absolute;
-  inset: -40% !important;
-  opacity: .82;
-  background: repeating-linear-gradient(
-    150deg,
-    transparent 0px 12px,
-    rgba(211, 246, 225, .21) 13px 16px,
-    transparent 17px 34px
-  ) !important;
-  background-size: auto !important;
-  background-repeat: repeat !important;
-  animation: seamless-globe-surface 4s linear infinite !important;
-  will-change: transform;
+  inset: 0 !important;
+  width: 100%;
+  height: 100%;
+  transform: none !important;
+  background: none !important;
+  animation: none !important;
+  opacity: 1;
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-/* A horizontal 68px shift is one exact period of the 34px
-   repeating gradient at 150deg: no line or jump on repeat. */
-@keyframes seamless-globe-surface {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-68px, 0, 0); }
-}
-
-/* Stars: wider, faster movement */
-.hero-visual .s1 {
-  animation: star-one 6s ease-in-out infinite !important;
-}
-.hero-visual .s2 {
-  animation: star-two 8s ease-in-out infinite !important;
-}
-.hero-visual .s3 {
-  animation: star-three 7s ease-in-out infinite !important;
-}
+/* Stars: preserve the lively motion already chosen. */
+.hero-visual .s1 { animation: star-one 6s ease-in-out infinite !important; }
+.hero-visual .s2 { animation: star-two 8s ease-in-out infinite !important; }
+.hero-visual .s3 { animation: star-three 7s ease-in-out infinite !important; }
 
 @keyframes star-one {
   0%,100% {transform:translate(0,0) rotate(0deg);opacity:.6}
@@ -69,27 +55,20 @@
   50% {transform:translate(120px,50px) rotate(180deg);opacity:.5}
   75% {transform:translate(20px,100px) rotate(270deg) scale(1.4);opacity:1}
 }
-
 @keyframes star-two {
   0%,100% {transform:translate(0,0) rotate(0deg);opacity:.6}
   25% {transform:translate(-70px,-80px) rotate(90deg) scale(1.5);opacity:1}
   50% {transform:translate(-120px,10px) rotate(180deg);opacity:.4}
   75% {transform:translate(-50px,85px) rotate(270deg) scale(1.6);opacity:1}
 }
-
 @keyframes star-three {
   0%,100% {transform:translate(0,0) rotate(0deg);opacity:.6}
   25% {transform:translate(90px,-80px) rotate(90deg) scale(1.5);opacity:1}
   50% {transform:translate(125px,-20px) rotate(180deg);opacity:.5}
   75% {transform:translate(-45px,35px) rotate(270deg) scale(1.5);opacity:1}
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .hero-visual .planet,
-  .hero-visual .planet-inner,
-  .hero-visual .star {
-    animation: none !important;
-  }
+  .hero-visual .star { animation: none !important; }
 }
 </style>
 
@@ -201,8 +180,7 @@
      <div class="orbital orbit-three">
      </div>
      <div class="planet">
-      <div class="planet-inner">
-      </div>
+      <canvas class="planet-inner" width="330" height="330" aria-hidden="true"></canvas>
      </div>
      <div class="visual-tag t-one">
       01 / EXPERIMENT
@@ -2082,5 +2060,92 @@
   </script>
   <script defer="True" src="v7.js">
   </script>
- </body>
+ <script>
+/* Seamless vertical-axis rotation of the *surface* on a projected sphere.
+   Unlike a scrolling CSS background, these periodic spherical coordinates
+   have no bitmap/tile edge, so there is no vertical or diagonal seam. */
+(() => {
+  const canvas = document.querySelector('.hero-visual canvas.planet-inner');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', {alpha: true});
+  if (!ctx) return;
+  const W = 330, H = 330, size = W * H;
+  canvas.width = W;
+  canvas.height = H;
+  const frame = ctx.createImageData(W, H);
+  const pixels = frame.data;
+  const stripes = new Float32Array(size);
+  const longitude = new Float32Array(size);
+  const latitude = new Float32Array(size);
+  const limb = new Float32Array(size);
+
+  /* Front hemisphere: longitude, latitude and foreshortening per pixel. */
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      const nx = ((x + .5) - W / 2) / (W / 2);
+      const ny = ((y + .5) - H / 2) / (H / 2);
+      const r2 = nx * nx + ny * ny;
+      if (r2 >= 1) continue;
+      const z = Math.sqrt(1 - r2);
+      const lon = Math.atan2(nx, z);
+      const lat = Math.asin(ny);
+      longitude[i] = lon;
+      latitude[i] = lat;
+      /* 20 is an integer, hence exact 2π periodicity when the sphere turns. */
+      stripes[i] = 20 * lon + 9 * lat;
+      limb[i] = Math.pow(z, .52);
+    }
+  }
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let visible = true;
+  let rafId = 0;
+  let lastDraw = -1000;
+
+  function paint(timestamp) {
+    /* One real revolution about the vertical axis every 14 seconds. */
+    const theta = reduceMotion.matches ? 0 : timestamp * (2 * Math.PI / 14000);
+    const stripeOffset = 20 * theta;
+    for (let i = 0; i < size; i++) {
+      const j = i * 4;
+      if (!limb[i]) { pixels[j + 3] = 0; continue; }
+      const band = Math.pow(Math.max(0, Math.cos(stripes[i] + stripeOffset)), 14);
+      const lon = longitude[i] + theta;
+      const lat = latitude[i];
+      /* Low-contrast terrain gives the rotation a readable axis. All terms
+         are periodic in longitude: no discontinuity at ±π. */
+      const terrain = Math.max(0, Math.sin(3 * lon + 2.2 * lat)
+                          * Math.cos(2 * lon - 3.5 * lat));
+      const alpha = (0.255 * band + 0.065 * terrain) * (.20 + .80 * limb[i]);
+      pixels[j] = 200;
+      pixels[j + 1] = 247;
+      pixels[j + 2] = 224;
+      pixels[j + 3] = Math.round(alpha * 255);
+    }
+    ctx.putImageData(frame, 0, 0);
+  }
+
+  function tick(timestamp) {
+    if (timestamp - lastDraw >= 1000 / 30) {
+      paint(timestamp);
+      lastDraw = timestamp;
+    }
+    rafId = visible && !reduceMotion.matches ? requestAnimationFrame(tick) : 0;
+  }
+  function syncAnimation() {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    if (visible && !reduceMotion.matches) rafId = requestAnimationFrame(tick);
+    else if (visible) paint(0);
+  }
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    syncAnimation();
+  }, {threshold: 0}).observe(canvas);
+  reduceMotion.addEventListener('change', syncAnimation);
+  paint(0);
+})();
+</script>
+  </body>
 </html>
