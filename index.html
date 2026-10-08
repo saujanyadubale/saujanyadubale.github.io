@@ -20,6 +20,85 @@
   <link href="v7.css" rel="stylesheet"/>
   <link href="v10.css" rel="stylesheet"/>
   <link href="v11.css" rel="stylesheet"/>
+  
+<style>
+/* Globe: stop vertical floating */
+.hero-visual .planet {
+  animation: none !important;
+}
+
+/* Visibly rotating planetary surface */
+.hero-visual .planet-inner {
+  inset: 0 !important;
+  transform: none !important;
+  opacity: .85;
+  background-image:
+    radial-gradient(
+      ellipse 85px 140px at 45px 45%,
+      rgba(180,255,227,.35),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 80px 115px at 240px 55%,
+      rgba(8,32,60,.65),
+      transparent
+    ),
+    repeating-linear-gradient(
+      150deg,
+      transparent 0 12px,
+      rgba(215,255,230,.25) 13px 17px,
+      transparent 18px 36px
+    );
+  background-size: 330px 100%;
+  background-repeat: repeat-x;
+  animation: planet-turn 5s linear infinite !important;
+}
+
+@keyframes planet-turn {
+  from { background-position: 0 0; }
+  to { background-position: -330px 0; }
+}
+
+/* Stars: wider, faster movement */
+.hero-visual .s1 {
+  animation: star-one 6s ease-in-out infinite !important;
+}
+.hero-visual .s2 {
+  animation: star-two 8s ease-in-out infinite !important;
+}
+.hero-visual .s3 {
+  animation: star-three 7s ease-in-out infinite !important;
+}
+
+@keyframes star-one {
+  0%,100% {transform:translate(0,0) rotate(0deg);opacity:.6}
+  25% {transform:translate(80px,-40px) rotate(90deg) scale(1.6);opacity:1}
+  50% {transform:translate(120px,50px) rotate(180deg);opacity:.5}
+  75% {transform:translate(20px,100px) rotate(270deg) scale(1.4);opacity:1}
+}
+
+@keyframes star-two {
+  0%,100% {transform:translate(0,0) rotate(0deg);opacity:.6}
+  25% {transform:translate(-70px,-80px) rotate(90deg) scale(1.5);opacity:1}
+  50% {transform:translate(-120px,10px) rotate(180deg);opacity:.4}
+  75% {transform:translate(-50px,85px) rotate(270deg) scale(1.6);opacity:1}
+}
+
+@keyframes star-three {
+  0%,100% {transform:translate(0,0) rotate(0deg);opacity:.6}
+  25% {transform:translate(90px,-80px) rotate(90deg) scale(1.5);opacity:1}
+  50% {transform:translate(125px,-20px) rotate(180deg);opacity:.5}
+  75% {transform:translate(-45px,35px) rotate(270deg) scale(1.5);opacity:1}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual .planet-inner,
+  .hero-visual .star {
+    animation: none !important;
+  }
+}
+</style>
+
  </head>
  <body>
   <div class="grain">
