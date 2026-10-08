@@ -22,10 +22,22 @@
   <link href="v11.css" rel="stylesheet"/>
   
 <style>
-/* Globe: stop vertical floating */
+
+/* Continuous clockwise globe rotation */
 .hero-visual .planet {
-  animation: none !important;
+  animation: globe-clockwise 10s linear infinite !important;
+  transform-origin: center center;
 }
+
+@keyframes globe-clockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 /* Visibly rotating planetary surface */
 .hero-visual .planet-inner {
