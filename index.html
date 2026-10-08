@@ -22,55 +22,34 @@
   <link href="v11.css" rel="stylesheet"/>
   
 <style>
-
-/* Continuous clockwise globe rotation */
+/* One moving, continuous stripe field. The planet itself does not spin as a flat disk. */
 .hero-visual .planet {
-  animation: globe-clockwise 10s linear infinite !important;
-  transform-origin: center center;
-}
-
-@keyframes globe-clockwise {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-/* Visibly rotating planetary surface */
-.hero-visual .planet-inner {
-  inset: 0 !important;
+  animation: none !important;
   transform: none !important;
-  opacity: .85;
-  background-image:
-    radial-gradient(
-      ellipse 85px 140px at 45px 45%,
-      rgba(180,255,227,.35),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 80px 115px at 240px 55%,
-      rgba(8,32,60,.65),
-      transparent
-    ),
-    repeating-linear-gradient(
-      150deg,
-      transparent 0 12px,
-      rgba(215,255,230,.25) 13px 17px,
-      transparent 18px 36px
-    );
-  
-background-size: auto;
-background-repeat: no-repeat;
-background-position: center;
-animation: none !important;
 }
 
-@keyframes planet-turn {
-  from { background-position: 0 0; }
-  to { background-position: -330px 0; }
+/* The broad texture extends beyond the clipping circle, so its edge never enters view. */
+.hero-visual .planet-inner {
+  position: absolute;
+  inset: -40% !important;
+  opacity: .82;
+  background: repeating-linear-gradient(
+    150deg,
+    transparent 0px 12px,
+    rgba(211, 246, 225, .21) 13px 16px,
+    transparent 17px 34px
+  ) !important;
+  background-size: auto !important;
+  background-repeat: repeat !important;
+  animation: seamless-globe-surface 4s linear infinite !important;
+  will-change: transform;
+}
+
+/* A horizontal 68px shift is one exact period of the 34px
+   repeating gradient at 150deg: no line or jump on repeat. */
+@keyframes seamless-globe-surface {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-68px, 0, 0); }
 }
 
 /* Stars: wider, faster movement */
@@ -106,6 +85,7 @@ animation: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-visual .planet,
   .hero-visual .planet-inner,
   .hero-visual .star {
     animation: none !important;
