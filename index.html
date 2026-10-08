@@ -46,7 +46,7 @@
 
 /* Subtle star drift: adjust this one value to set travel distance.
    18px = very gentle, 26px = balanced, 40px = more noticeable. */
-.hero-visual { --star-travel: 20px; }
+.hero-visual { --star-travel: 26px; }
 
 .hero-visual .s1 { animation: star-one 11s ease-in-out infinite !important; }
 .hero-visual .s2 { animation: star-two 13s ease-in-out infinite !important; }
@@ -123,7 +123,7 @@
    </button>
   </header>
   <main>
-   <section class="hero wrap">
+   <section class="hero wrap" id="home">
     <div class="hero-copy">
      <div class="eyebrow">
       <span class="pulse">
@@ -2044,10 +2044,8 @@
     <span>
      MADE WITH CURIOSITY, BUILT WITH INTENTION.
     </span>
-    
-    <a href="index.html"
-       onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">
-      BACK TO TOP &uarr;
+    <a href="#home">
+     BACK TO TOP &uarr;
     </a>
    </div>
   </footer>
