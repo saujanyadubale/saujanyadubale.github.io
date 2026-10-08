@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1250 492" role="img" aria-labelledby="title desc">
+<title id="title">ANTARES PMT quantum-efficiency measurement chain</title>
+<desc id="desc">Xenon lamp provides illumination. MSH-300 monochromator selects wavelength. Optical path feeds either a PMT or calibrated silicon photodiode. Keithley 6487 and Python PyVISA record currents. Dark correction and photodiode calibration lead to QE and quality-control analysis.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#102c39"/><stop offset="1" stop-color="#0a1925"/></linearGradient>
+ <linearGradient id="beam" x1="0" x2="1"><stop stop-color="#f6d57b"/><stop offset=".55" stop-color="#8fcddd"/><stop offset="1" stop-color="#9af6d1"/></linearGradient>
+ <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#98e8ce"/></marker>
+ <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#04080d" flood-opacity=".4"/></filter>
+</defs>
+<rect width="1250" height="492" rx="20" fill="url(#bg)"/><g font-family="Arial,Helvetica,sans-serif">
+ <text x="46" y="53" fill="#b7f7d7" font-size="14" font-weight="700" letter-spacing="2.6">OPTICAL HARDWARE → DATA ACQUISITION → QE</text>
+ <text x="46" y="88" fill="#f1f9fa" font-size="25" font-weight="750">From a photon to a calibrated measurement</text>
+ <g stroke="#80bbbc" fill="none" stroke-width="2.6" marker-end="url(#arrow)">
+  <path d="M251 203H315"/><path d="M555 203H613"/><path d="M815 203H875"/>
+  <path d="M1030 271V289H625V310"/><path d="M740 347H869"/>
+ </g>
+ <g filter="url(#shadow)">
+  <rect x="48" y="135" width="204" height="136" rx="12" fill="#1b3945" stroke="#57817e"/>
+  <rect x="315" y="135" width="241" height="136" rx="12" fill="#1b3945" stroke="#57817e"/>
+  <rect x="614" y="135" width="203" height="136" rx="12" fill="#1b3945" stroke="#57817e"/>
+  <rect x="875" y="135" width="314" height="136" rx="12" fill="#1b3945" stroke="#57817e"/>
+  <rect x="486" y="310" width="255" height="108" rx="12" fill="#163241" stroke="#57817e"/>
+  <rect x="870" y="310" width="319" height="108" rx="12" fill="#173c3b" stroke="#95dcbf"/>
+ </g>
+ <g fill="#a4f4d7" font-size="12" font-weight="700" letter-spacing="1.5"><text x="67" y="160">01 · SOURCE</text><text x="333" y="160">02 · SPECTRAL SELECTION</text><text x="631" y="160">03 · DETECTOR</text><text x="892" y="160">04 · ELECTRICAL READOUT</text><text x="504" y="333">05 · PYTHON ACQUISITION</text><text x="888" y="333">06 · CALIBRATE + ASSESS</text></g>
+ <g fill="#f2f8fa" font-size="21" font-weight="700"><text x="67" y="198">Xenon lamp</text><text x="333" y="198">Monochromator</text><text x="631" y="197">PMT / Si PD</text><text x="892" y="198">Keithley 6487</text><text x="504" y="368">PyVISA scans</text><text x="888" y="368">QE (%) → Quality control</text></g>
+ <g fill="#b4cbd2" font-size="13"><text x="67" y="231">Broadband light</text><text x="333" y="231">MSH-300 · slit + filters</text><text x="631" y="228">Rotation stage</text><text x="892" y="228">Picoammeter · PMT/PD current</text><text x="504" y="393">Wavelength · metadata</text><text x="888" y="393">Dark correction · reference PD</text></g>
+ <rect x="46" y="451" width="1157" height="1" fill="#325864"/>
+ <text x="48" y="475" fill="#91afb8" font-size="12">Schematic of the thesis measurement workflow · not a wiring diagram · ECAP / FAU</text>
+</g></svg>

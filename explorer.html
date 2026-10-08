@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ST5937 · Quantum efficiency explorer</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#09131d;color:#f0f4f7}#stage{position:relative;height:100vh;min-height:520px;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#1b3441 0%,#0a1722 58%,#07111b 100%)}canvas{display:block}#lead{position:absolute;left:clamp(14px,2vw,28px);top:19px;z-index:1;pointer-events:none;max-width:260px}#lead h1{font-size:clamp(18px,2.3vw,28px);line-height:1.08;margin:8px 0;font-weight:740}#lead p,.desc{font-size:12px;line-height:1.55;color:#b6c9d6}.eyebrow{color:#aaf1d2;font-size:10px;font-weight:700;letter-spacing:2px}#hud{position:absolute;top:18px;right:18px;background:rgba(10,24,35,.85);border:1px solid #355563;padding:12px 13px;border-radius:11px;min-width:164px;font-size:12px;line-height:1.7}#hud b{color:#e7f5e9}button{background:#1d4549;color:#e6fff7;border:1px solid #4b7774;border-radius:7px;padding:6px 9px;font-size:12px;cursor:pointer}button:hover{background:#306263}#foot{position:absolute;bottom:18px;left:20px;right:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}#legend{background:#0b1823b8;padding:12px 14px;border:1px solid #334956;border-radius:9px;max-width:660px}#scale{display:flex;align-items:center;gap:9px;font-size:11px;color:#e2edf3;flex-wrap:wrap}#gradient{height:12px;width:min(20vw,200px);min-width:110px;border-radius:99px;background:linear-gradient(90deg,#000004 0.000%,#110a30 8.333%,#320a5e 16.667%,#57106e 25.000%,#781c6d 33.333%,#9a2865 41.667%,#bc3754 50.000%,#d84c3e 58.333%,#ed6925 66.667%,#f98e09 75.000%,#fbb61a 83.333%,#f4df53 91.667%,#fcffa4 100.000%)}#legend p{font-size:11px;color:#a7bfcb;line-height:1.45;margin:8px 0 0}#mode-row{display:flex;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap}#mode-row label{font-size:11px;color:#cce2e7;cursor:pointer}#hint{font-size:11px;color:#a2becb;text-align:right;padding-bottom:4px}#error{position:absolute;top:46%;left:18px;color:#ffd0a0;max-width:400px}#mode-toggle{padding:6px 10px}
+#qe-tuner{margin:10px 0 2px;border-top:1px solid #34545f;padding-top:9px}
+#qe-tuner>summary{cursor:pointer;font-size:12px;font-weight:650;color:#c3edcf;list-style:none;display:inline-block}
+#qe-tuner>summary::-webkit-details-marker{display:none}
+#qe-tuner>summary:after{content:'  ▾';color:#a6cbbe}
+#qe-tuner[open]>summary:after{content:'  ▴'}
+#qe-tuner .qe-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0;}
+#qe-tuner label{display:flex;flex-direction:column;gap:4px;color:#d0e4e7;font-size:11px}
+#qe-tuner input[type=number]{width:100%;max-width:110px;border:1px solid #51717b;border-radius:6px;background:#081720;color:#e9fffa;padding:7px 8px;font-size:13px}
+#qe-tuner input[type=range]{width:100%;accent-color:#bfeac2;cursor:pointer;margin:4px 0}
+.qe-presets{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.qe-presets button{font-size:10px;padding:5px 8px}
+#qe-status{min-height:12px;font-size:11px;color:#adc2c6}
+@media(max-width:620px){#stage{min-height:650px}#lead{top:10px;max-width:180px}#lead p{font-size:10px}#hud{top:11px;right:9px;min-width:135px;font-size:10px;padding:8px}#foot{bottom:9px;left:9px;right:9px}#legend{padding:8px}#legend p{font-size:10px}#hint{display:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}</script></head>
+<body><main id="stage"><div id="lead"><div class="eyebrow">ST5937 / 370 NM / INTERACTIVE</div><h1>Explore quantum efficiency in 3D.</h1><p>Actual calibrated QE values mapped onto a reconstructed R7081-20 photocathode. Drag, rotate and inspect the surface.</p></div><div id="hud"><div>QE at 370 nm<br/><b id="reading">Hover to inspect</b></div><div id="point">—</div><button id="reset">Reset view ↻</button></div><div id="foot"><div id="legend"><div id="mode-row"><span id="mode-toggle" style="font-size:11px;color:#b9e3d0">Display scale · 15–28% QE</span><label><input type="checkbox" id="spokes"/> Show measured scan directions</label></div><div id="scale"><span id="low">≤15.0%</span><div id="gradient"></div><span id="high">≥28.0%</span><span>Calibrated QE (%) · hover for exact values</span></div><details id="qe-tuner"><summary>Customize QE color range</summary>
+  <div class="qe-fields"><label for="qe-min">Lower limit (%)<input id="qe-min" type="number" value="15" min="0" max="27.9" step="0.1" inputmode="decimal"><input id="qe-min-slider" type="range" min="0" max="27.9" value="15" step="0.1" aria-label="Lower color limit slider"></label>
+  <label for="qe-max">Upper limit (%)<input id="qe-max" type="number" value="28" min="0.1" max="28" step="0.1" inputmode="decimal"><input id="qe-max-slider" type="range" min="0.1" max="28" value="28" step="0.1" aria-label="Upper color limit slider"></label></div>
+  <div class="qe-presets"><button type="button" data-range-preset="15,28">15–28%</button><button type="button" data-range-preset="22.4,25.1">Surface detail</button><button type="button" data-range-preset="0,28">Full 0–28%</button></div><p id="qe-status" role="status" aria-live="polite"></p>
+ </details><p>Inferno colors enhance contrast within the measured photocathode response; values on hover are calibrated QE (%) and never rescaled. Clipped colors outside the displayed range do not imply clipped numerical measurements. Adjust the display color limits below without changing the actual QE measurements. Measured axes: 0°, 90°, 180°, 270°. Intermediate positions are interpolated. PMT shape is datasheet-inspired, not a CAD scan.</p></div><div id="hint">DRAG rotate · SCROLL zoom · HOVER measure</div></div></main>
+<script type="module">
+import * as THREE from 'three';import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const root=document.getElementById('stage');
+try{
+const data=await (await fetch('assets/st5937-qe-percent.json')).json();const rGrid=data.radii_mm, aGrid=data.azimuth_deg,V=data.values;let qMin=15,qMax=28;
+const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(35,root.clientWidth/root.clientHeight,1,2000);const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(root.clientWidth,root.clientHeight);root.prepend(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,0,160);controls.enableDamping=true;controls.minDistance=300;controls.maxDistance=1000;controls.maxPolarAngle=Math.PI*.9;
+function defaultView(){camera.position.set(370,-470,420);controls.target.set(0,0,155);controls.update()}defaultView();
+scene.add(new THREE.AmbientLight(0xffffff,2));const key=new THREE.DirectionalLight(0xd6eaff,4);key.position.set(-180,-230,440);scene.add(key);const fill=new THREE.DirectionalLight(0x75f5eb,2);fill.position.set(240,220,230);scene.add(fill);const back=new THREE.DirectionalLight(0xffbb99,1.4);back.position.set(40,160,-80);scene.add(back);
+const rr=[0,18,36,54,72,88,100,110,118,126.5],zz=[297.5,296,291.4,283.2,272,260.8,253.2,247.6,236.8,215.5];
+function smoothHeight(r){let i=0;while(i<rr.length-2&&r>rr[i+1])i++;const t=THREE.MathUtils.clamp((r-rr[i])/(rr[i+1]-rr[i]),0,1);const d=(rr[i+1]-rr[i]);const m0=i===0?(zz[1]-zz[0])/(rr[1]-rr[0]):(zz[i+1]-zz[i-1])/(rr[i+1]-rr[i-1]);const m1=i+2>=rr.length?(zz[i+1]-zz[i])/(rr[i+1]-rr[i]):(zz[i+2]-zz[i])/(rr[i+2]-rr[i]);return (2*t**3-3*t*t+1)*zz[i]+(t**3-2*t*t+t)*m0*d+(-2*t**3+3*t*t)*zz[i+1]+(t**3-t*t)*m1*d}
+function indexFor(arr,v){let lo=0,hi=arr.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(arr[mid]<=v)lo=mid;else hi=mid}return lo}
+function measure(r,phi){const rad=Math.max(0,Math.min(r,rGrid[rGrid.length-1])),a=((phi*180/Math.PI)%360+360)%360;const ri=indexFor(rGrid,rad),ai=Math.min(aGrid.length-1,Math.floor(a/(360/aGrid.length))),r0=rGrid[ri],r1=rGrid[ri+1],a0=aGrid[ai],a1=ai===aGrid.length-1?360:aGrid[ai+1],u=(rad-r0)/(r1-r0),t=(a-a0)/(a1-a0),aj=(ai+1)%aGrid.length;return (1-u)*((1-t)*V[ri][ai]+t*V[ri][aj])+u*((1-t)*V[ri+1][ai]+t*V[ri+1][aj])}
+const stops=["#000004","#110a30","#320a5e","#57106e","#781c6d","#9a2865","#bc3754","#d84c3e","#ed6925","#f98e09","#fbb61a","#f4df53","#fcffa4"];const colors=stops.map(x=>new THREE.Color(x));
+// Only the visualization range changes; all tooltip readings remain absolute calibrated QE.
+function ramp(q){const u=THREE.MathUtils.clamp((q-qMin)/(qMax-qMin),0,1);const seg=u*(colors.length-1),i=Math.min(colors.length-2,Math.floor(seg));return colors[i].clone().lerp(colors[i+1],seg-i)}
+const NR=155,NP=240,coords=[],qValues=[],tri=[];for(let i=0;i<=NR;i++){const r=126.5*i/NR;for(let j=0;j<=NP;j++){let a=j/NP*2*Math.PI;coords.push(r*Math.cos(a),r*Math.sin(a),smoothHeight(r));qValues.push(measure(r,a))}}for(let i=0;i<NR;i++)for(let j=0;j<NP;j++){const a=i*(NP+1)+j,b=a+NP+1;tri.push(a,b,a+1,b,b+1,a+1)}const geom=new THREE.BufferGeometry();geom.setAttribute('position',new THREE.Float32BufferAttribute(coords,3));geom.setIndex(tri);geom.computeVertexNormals();const colorAttr=new THREE.Float32BufferAttribute(new Float32Array(qValues.length*3),3);geom.setAttribute('color',colorAttr);function updateColors(){qValues.forEach((q,i)=>{const c=ramp(q);colorAttr.setXYZ(i,c.r,c.g,c.b)});colorAttr.needsUpdate=true;document.getElementById('low').textContent='≤'+qMin.toFixed(1)+'%';document.getElementById('high').textContent='≥'+qMax.toFixed(1)+'%';document.getElementById('mode-toggle').textContent='Display scale · '+qMin.toFixed(1)+'–'+qMax.toFixed(1)+'% QE'}updateColors();
+const surface=new THREE.Mesh(geom,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide}));surface.renderOrder=2;scene.add(surface);
+function lathe(profile,c,{metalness=.35,roughness=.48,opacity=1}={}){let g=new THREE.LatheGeometry(profile.map(([r,z])=>new THREE.Vector2(r,z)),144);g.rotateX(Math.PI/2);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:c,metalness,roughness,side:THREE.DoubleSide,transparent:opacity<1,opacity}));scene.add(m);return m}
+lathe([[0,20],[25,20],[25,51],[42.25,52],[42.25,94],[43,108],[46,124],[56,142],[73,160],[97,181],[118,201],[126.5,215.5]],0x859da9,{metalness:.5,roughness:.35});
+lathe([[0,12],[21,12],[21,24],[24,24],[24,54]],0x2c3d50,{metalness:.25,roughness:.68});
+// Eight individual electrical contact pins, not a solid cylindrical bundle.
+const pinMat=new THREE.MeshStandardMaterial({color:0xc1c8c8,metalness:.75,roughness:.27});for(let k=0;k<8;k++){const a=k*2*Math.PI/8;const r=14;const pin=new THREE.Mesh(new THREE.CylinderGeometry(2.05,2.05,24,12),pinMat);pin.rotation.x=Math.PI/2;pin.position.set(Math.cos(a)*r,Math.sin(a)*r,1);scene.add(pin);const tip=new THREE.Mesh(new THREE.SphereGeometry(2.05,10,8),pinMat);tip.position.set(Math.cos(a)*r,Math.sin(a)*r,-11);scene.add(tip)}
+const ringPts=[];for(let j=0;j<=250;j++){const a=j/250*2*Math.PI;ringPts.push(new THREE.Vector3(110*Math.cos(a),110*Math.sin(a),smoothHeight(110)+1))}const ring=new THREE.Line(new THREE.BufferGeometry().setFromPoints(ringPts),new THREE.LineBasicMaterial({color:0xc1f0dd,opacity:.73,transparent:true}));scene.add(ring);
+const spokes=new THREE.Group();for(let d=0;d<360;d+=90){const points=[];for(let r=0;r<=126;r+=2){const a=d*Math.PI/180;points.push(new THREE.Vector3(r*Math.cos(a),r*Math.sin(a),smoothHeight(r)+1.5))}spokes.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color:0x8fffe4,dashSize:4,gapSize:4,transparent:true,opacity:.78})));spokes.children.at(-1).computeLineDistances()}spokes.visible=false;scene.add(spokes);
+const ray=new THREE.Raycaster(),p=new THREE.Vector2();renderer.domElement.addEventListener('pointermove',e=>{const r=renderer.domElement.getBoundingClientRect();p.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(p,camera);const hit=ray.intersectObject(surface,false)[0];const reading=document.getElementById('reading'),point=document.getElementById('point');if(hit){const xyz=hit.point,rad=Math.hypot(xyz.x,xyz.y),phi=Math.atan2(xyz.y,xyz.x);reading.textContent=measure(rad,phi).toFixed(2)+' %';point.textContent='r = '+rad.toFixed(1)+' mm | φ = '+((phi*180/Math.PI+360)%360).toFixed(0)+'°'}else{reading.textContent='Hover to inspect';point.textContent='—'}});
+// V10: numerical and slider controls affect visualization only, not calibrated QE data.
+const minNum=document.getElementById('qe-min'),maxNum=document.getElementById('qe-max');
+const minSlider=document.getElementById('qe-min-slider'),maxSlider=document.getElementById('qe-max-slider');
+const status=document.getElementById('qe-status');
+function applyRange(lower,upper){
+  lower=Number(lower);upper=Number(upper);
+  if(!Number.isFinite(lower)||!Number.isFinite(upper)||lower<0||upper>28||upper-lower<.1){
+    status.textContent='Lower limit must be at least 0.1% below upper limit; both must be within 0–28%.';
+    return false;
+  }
+  qMin=lower;qMax=upper;
+  minNum.value=minSlider.value=lower.toFixed(1);maxNum.value=maxSlider.value=upper.toFixed(1);
+  status.textContent='Showing QE colors from '+lower.toFixed(1)+'% to '+upper.toFixed(1)+'%.';
+  updateColors();return true;
+}
+minNum.addEventListener('change',()=>{if(!applyRange(minNum.value,qMax))minNum.value=qMin.toFixed(1)});
+maxNum.addEventListener('change',()=>{if(!applyRange(qMin,maxNum.value))maxNum.value=qMax.toFixed(1)});
+minSlider.addEventListener('input',()=>{if(!applyRange(minSlider.value,qMax))minSlider.value=qMin.toFixed(1)});
+maxSlider.addEventListener('input',()=>{if(!applyRange(qMin,maxSlider.value))maxSlider.value=qMax.toFixed(1)});
+document.querySelectorAll('[data-range-preset]').forEach(b=>b.addEventListener('click',()=>{const [lo,hi]=b.dataset.rangePreset.split(',').map(Number);applyRange(lo,hi)}));
+document.getElementById('spokes').addEventListener('change',e=>spokes.visible=e.target.checked);document.getElementById('reset').addEventListener('click',defaultView);
+new ResizeObserver(()=>{camera.aspect=root.clientWidth/root.clientHeight;camera.updateProjectionMatrix();renderer.setSize(root.clientWidth,root.clientHeight)}).observe(root);
+function draw(){requestAnimationFrame(draw);controls.update();renderer.render(scene,camera)}draw();
+}catch(e){console.error(e);document.getElementById('stage').insertAdjacentHTML('beforeend','<p id="error">Viewer could not load. Use a local HTTP server and connect to the internet for Three.js.</p>')}
+</script></body></html>
