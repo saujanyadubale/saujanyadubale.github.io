@@ -4,60 +4,121 @@
 @media(max-width:1050px){.qc-pipeline,.policy-lab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:750px){.qc-intro,.policy-compare{grid-template-columns:1fr}.qc-gallery{grid-template-columns:1fr}.qc-figure-wide{grid-column:auto}.qc-notes{grid-template-columns:1fr}.qc-pipeline,.policy-lab-grid{grid-template-columns:1fr}.qc-story{margin:65px 0}.qc-figure a{min-height:200px;padding:8px}.policy-compare{padding:19px}}@media(prefers-reduced-motion:reduce){.qc-figure img{transition:none}}
 
 /* Continuous globe surface rotation */
+
+/* Globe: rotate its surface while keeping lighting fixed */
+.hero-visual .planet {
+  animation: none;
+}
+
 .hero-visual .planet-inner {
-  background-size: calc(100% + 68px) 100%;
-  animation: globe-surface-spin 12s linear infinite;
+  transform-origin: center center;
+  background:
+    radial-gradient(
+      ellipse at 30% 30%,
+      rgba(205, 255, 229, .18),
+      transparent 22%
+    ),
+    radial-gradient(
+      ellipse at 72% 65%,
+      rgba(12, 35, 56, .35),
+      transparent 27%
+    ),
+    repeating-linear-gradient(
+      150deg,
+      transparent 0 12px,
+      rgba(211, 246, 225, .12) 13px 15px,
+      transparent 16px 34px
+    );
+  animation: globe-rotate 16s linear infinite;
 }
 
-@keyframes globe-surface-spin {
-  from { background-position: 0 0; }
-  to   { background-position: -68px 0; }
+@keyframes globe-rotate {
+  from { transform: rotate(-18deg); }
+  to   { transform: rotate(342deg); }
 }
 
-/* Stars spin, drift and twinkle */
+/* Stars: larger orbital movement */
 .hero-visual .star {
+  position: absolute;
+  display: inline-block;
   transform-origin: center;
-  animation: star-motion 10s linear infinite;
+  will-change: transform, opacity;
+  text-shadow: 0 0 12px rgba(190, 255, 205, .5);
 }
 
 .hero-visual .s1 {
-  animation-duration: 9s;
+  animation: star-orbit-one 11s ease-in-out infinite;
 }
 
 .hero-visual .s2 {
-  animation-duration: 13s;
-  animation-direction: reverse;
+  animation: star-orbit-two 14s ease-in-out infinite;
 }
 
 .hero-visual .s3 {
-  animation-duration: 11s;
-  animation-delay: -5s;
+  animation: star-orbit-three 12s ease-in-out infinite;
 }
 
-@keyframes star-motion {
-  0% {
+/* Upper-left star */
+@keyframes star-orbit-one {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(.9);
+    opacity: .6;
+  }
+  25% {
+    transform: translate(55px, -35px) rotate(90deg) scale(1.5);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(95px, 25px) rotate(180deg) scale(.8);
+    opacity: .5;
+  }
+  75% {
+    transform: translate(25px, 70px) rotate(270deg) scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* Right-side star */
+@keyframes star-orbit-two {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: .7;
+  }
+  25% {
+    transform: translate(-65px, -65px) rotate(-90deg) scale(1.4);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-100px, 25px) rotate(-180deg) scale(.7);
+    opacity: .45;
+  }
+  75% {
+    transform: translate(-35px, 75px) rotate(-270deg) scale(1.5);
+    opacity: 1;
+  }
+}
+
+/* Lower-left star */
+@keyframes star-orbit-three {
+  0%, 100% {
     transform: translate(0, 0) rotate(0deg) scale(.9);
     opacity: .65;
   }
   25% {
-    transform: translate(12px, -8px) rotate(90deg) scale(1.2);
+    transform: translate(70px, -65px) rotate(90deg) scale(1.4);
     opacity: 1;
   }
   50% {
-    transform: translate(0, -16px) rotate(180deg) scale(.9);
-    opacity: .7;
+    transform: translate(105px, -15px) rotate(180deg) scale(.7);
+    opacity: .4;
   }
   75% {
-    transform: translate(-12px, -8px) rotate(270deg) scale(1.2);
+    transform: translate(-40px, 35px) rotate(270deg) scale(1.3);
     opacity: 1;
-  }
-  100% {
-    transform: translate(0, 0) rotate(360deg) scale(.9);
-    opacity: .65;
   }
 }
 
-/* Respect reduced-motion preferences */
+/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .hero-visual .planet-inner,
   .hero-visual .star {
