@@ -80,6 +80,90 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-visual .star { animation: none !important; }
 }
+
+/* My early ventures — a compact extension of the existing dark portfolio. */
+.venture-journey {
+  margin: 62px 0 78px;
+  padding: clamp(24px, 3.7vw, 42px);
+  border: 1px solid #33545b;
+  border-radius: 18px;
+  background: linear-gradient(140deg, #132b35 0%, #0d1e2a 60%, #0b1723 100%);
+}
+.venture-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 28px;
+}
+.venture-heading h3 {
+  font: 600 clamp(27px, 3.4vw, 41px)/1.15 var(--display);
+  letter-spacing: -.045em;
+  color: #f1f7f6;
+  margin: 11px 0 0;
+}
+.venture-heading h3 em { color: var(--lime); font-style: italic; }
+.venture-heading > p {
+  margin: 0;
+  max-width: 465px;
+  color: #aec7cb;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.venture-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 27px;
+}
+.venture-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid #35515a;
+  border-top: 2px solid #8bcab4;
+  border-radius: 10px;
+  padding: 22px;
+  background: #0c1926;
+}
+.venture-card:nth-child(2) { border-top-color: #7db8c9; }
+.venture-card:nth-child(3) { border-top-color: #c4d9aa; }
+.venture-card-label {
+  color: #a9d3c3;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.venture-card h4 {
+  margin: 0;
+  color: #f1f8f7;
+  font: 600 clamp(19px, 1.8vw, 24px)/1.25 var(--display);
+  letter-spacing: -.025em;
+}
+.venture-card p {
+  margin: 0;
+  color: #acc2ca;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.venture-impact {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #2e4852;
+  color: #caeecf;
+  font-size: 12px;
+}
+.venture-impact strong { color: #cef5ce; font-size: 21px; margin-right: 7px; }
+@media (max-width: 930px) {
+  .venture-heading { display: block; }
+  .venture-heading > p { margin-top: 13px; max-width: 720px; }
+  .venture-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .venture-card { transition: none; }
+}
+
 </style>
 
  </head>
@@ -1529,7 +1613,7 @@
        High Serve &amp; Knowter
       </h3>
       <p>
-       Building early ventures around sport, knowledge sharing and creating access to opportunity.
+       Early ventures in India spanning sports, knowledge barter and science outreach. Explore the story below.
       </p>
      </div>
      <div class="beyond-card bc2">
@@ -1578,6 +1662,33 @@
       </p>
      </div>
     </div>
+    <section class="venture-journey" id="entrepreneurial-journey" aria-labelledby="venture-heading">
+     <div class="venture-heading">
+      <div>
+       <p class="kicker">ENTREPRENEURIAL JOURNEY / INDIA</p>
+       <h3 id="venture-heading">Where I first learned to <em>build.</em></h3>
+      </div>
+      <p>Before moving to Germany, I explored ideas at the intersection of sport, knowledge-sharing and science outreach. Each taught me something about creating opportunities for others.</p>
+     </div>
+     <div class="venture-grid">
+      <article class="venture-card">
+       <span class="venture-card-label">01 / SPORTS &amp; COMMUNITY</span>
+       <h4>High Serve Society</h4>
+       <p>An early sports-management startup initiative with a mission to create better opportunities and experiences for dedicated, passionate players.</p>
+      </article>
+      <article class="venture-card">
+       <span class="venture-card-label">02 / KNOWLEDGE BARTER</span>
+       <h4>Knowter</h4>
+       <p>A peer-to-peer knowledge-sharing platform built around a simple idea: teach what you know, learn what you want, and exchange knowledge rather than money.</p>
+      </article>
+      <article class="venture-card">
+       <span class="venture-card-label">03 / SCIENCE OUTREACH · KNOWTER PROJECT</span>
+       <h4>Scienspiration</h4>
+       <p>Taking science beyond classrooms and textbooks through curiosity-led experiences for young people aged 7–20 in communities around Mumbai.</p>
+       <div class="venture-impact"><strong>1,000+</strong> young people reached</div>
+      </article>
+     </div>
+    </section>
     <div class="v3-community">
      <div class="v3-head">
       <div>
