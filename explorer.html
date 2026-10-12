@@ -72,4 +72,7 @@ document.getElementById('spokes').addEventListener('change',e=>spokes.visible=e.
 new ResizeObserver(()=>{camera.aspect=root.clientWidth/root.clientHeight;camera.updateProjectionMatrix();renderer.setSize(root.clientWidth,root.clientHeight)}).observe(root);
 function draw(){requestAnimationFrame(draw);controls.update();renderer.render(scene,camera)}draw();
 }catch(e){console.error(e);document.getElementById('stage').insertAdjacentHTML('beforeend','<p id="error">Viewer could not load. Use a local HTTP server and connect to the internet for Three.js.</p>')}
-</script></body></html>
+</script><!-- Cloudflare Web Analytics -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "21591efe3f3346eb9c64d5200067e255"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body></html>
