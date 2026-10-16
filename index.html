@@ -212,6 +212,13 @@
 @media(prefers-reduced-motion:reduce){.portfolio-disclosure .disclosure-summary,.disclosure-art img,.disclosure-action-arrow{transition:none!important}.portfolio-disclosure .disclosure-content{animation:none!important}}
 
 </style>
+<style>
+/* SAT-V&V research project preview */
+.satvv-feature-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media(max-width:760px){.satvv-feature-card{grid-template-columns:1fr}.satvv-feature-card .project-image{min-height:210px!important}.satvv-feature-card .project-info{padding:22px}}
+
+#satvv-preview,#research-projects{scroll-margin-top:104px}
+</style>
 </head>
  <body>
   <div class="grain">
@@ -998,6 +1005,7 @@
        </span>
        <span>
         Isaac Sim
+Isaac Sim
        </span>
        <span>
         GELLO
@@ -1997,6 +2005,7 @@
       </p>
      </div>
      <div class="beyond-card bc4">
+<div class="beyond-card bc4">
       <div class="beyond-icon">
        ♡
       </div>
@@ -2237,6 +2246,40 @@
   </details>
 
    
+   <!-- SAT-V&V / RESEARCH PROJECTS CARD START -->
+
+<details class="portfolio-disclosure" id="satvv-preview" name="portfolio-experiences">
+  <summary class="disclosure-summary">
+    <span class="disclosure-copy">
+      <span class="disclosure-kicker">06 / RESEARCH PROJECTS <span aria-hidden="true">/</span> SPACE SYSTEMS · SOFTWARE · AI</span>
+      <strong class="disclosure-headline">Can software decide what a spacecraft should test next?</strong>
+      <span class="disclosure-description">Meet SAT-V&amp;V: a simulation-driven verification laboratory combining spacecraft physics, fault injection, machine learning and adaptive test selection.</span>
+      <span class="disclosure-chips"><span class="disclosure-chip">20 verification procedures</span><span class="disclosure-chip">5 scheduling strategies</span><span class="disclosure-chip">Interactive mission replay</span></span>
+      <span class="disclosure-action"><span class="disclosure-action-open">Explore research projects</span><span class="disclosure-action-close">Close research projects</span><span class="disclosure-action-arrow" aria-hidden="true">↗</span></span>
+    </span>
+    <span class="disclosure-art" aria-hidden="true"><img src="satvv/preview.svg" loading="lazy" alt="Illustration of SAT-V&amp;V conceptual spacecraft and ground station"/><span class="disclosure-art-index">06 / RESEARCH PROJECTS</span></span>
+  </summary>
+  <div class="disclosure-content">
+    <section class="section wrap detail-section" id="research-projects">
+      <p class="kicker">RESEARCH PROJECTS / 01 · SPACECRAFT SYSTEMS</p>
+      <h2>SAT-V&amp;V <span class="serif">Spacecraft Verification &amp; Diagnostics.</span></h2>
+      <p class="muted-copy">An open engineering research prototype exploring which verification procedure should run next when spacecraft telemetry and diagnostic evidence evolve. Try recorded experiments directly in the browser, including verified failures, early anomaly warnings and a corrected test-selection case.</p>
+      <div class="project-grid" style="grid-template-columns:minmax(0,1fr);margin-top:28px">
+        <article class="project-card satvv-feature-card">
+          <div class="project-image" style="height:auto;min-height:270px"><img src="satvv/preview.svg" loading="lazy" alt="SAT-V&amp;V illustrated satellite and ground segment" style="height:100%;width:100%;object-fit:cover"/></div>
+          <div class="project-info"><div class="project-types"><span>SPACECRAFT SIMULATION</span><span>AI / ML</span><span>VERIFICATION</span></div>
+            <h3>Understand what fails. Decide what to test.</h3>
+            <p>Replay real recorded synthetic results, inspect subsystem evidence, and explore the difference between early warnings and formally verified requirement failures.</p>
+            <a class="text-link" href="satvv/">Launch the interactive research lab <span>↗</span></a>
+            <p style="font-size:11px;color:#99b3b5;margin-top:20px">Software-only research demonstrator · GitHub Pages replays archived experiments; full Python engine supplied separately · Not flight-validated</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</details>
+<!-- SAT-V&V / RESEARCH PROJECTS CARD END -->
+
    <section class="contact-section" id="contact">
     <div class="wrap contact-inner">
      <p class="kicker">
@@ -2437,8 +2480,5 @@
   paint(0);
 })();
 </script>
-  <!-- Cloudflare Web Analytics -->
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "21591efe3f3346eb9c64d5200067e255"}'></script>
-<!-- End Cloudflare Web Analytics -->
-</body>
+  </body>
 </html>
