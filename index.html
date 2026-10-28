@@ -207,6 +207,8 @@
 @keyframes disclosure-arrive{from{opacity:.78;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 #ecap,#robotics,#robotics-deep,#story,#more,#advanced-lab{scroll-margin-top:96px;}
 .portfolio-disclosure{scroll-margin-top:104px;}
+/* Prevent browser scroll anchoring to expanding or collapsing content. */
+.portfolio-disclosure .disclosure-content{overflow-anchor:none;}
 @media(max-width:1100px){.portfolio-disclosure{width:min(100% - 64px,1220px)}.disclosure-copy{padding:26px 29px;}}
 @media(max-width:760px){.portfolio-disclosure{width:calc(100% - 38px);margin:19px auto;}.portfolio-disclosure .disclosure-summary{grid-template-columns:1fr;min-height:0;}.disclosure-art{grid-row:1;min-height:170px;max-height:195px;border-left:0;border-bottom:1px solid #42646a60;}.disclosure-copy{gap:12px;padding:21px 21px 23px;}.disclosure-headline{font-size:clamp(25px,6vw,34px)}.disclosure-chips{gap:5px}.disclosure-chip{font-size:9px}.portfolio-disclosure .disclosure-content>.section.wrap{width:calc(100% - 30px)}.portfolio-disclosure .disclosure-content>.story-section .wrap,.portfolio-disclosure .disclosure-content>.dark-section .wrap{width:calc(100% - 30px)}.portfolio-disclosure .disclosure-content>.section,.portfolio-disclosure .disclosure-content>.case-study{padding-top:50px;padding-bottom:55px;}}
 @media(prefers-reduced-motion:reduce){.portfolio-disclosure .disclosure-summary,.disclosure-art img,.disclosure-action-arrow{transition:none!important}.portfolio-disclosure .disclosure-content{animation:none!important}}
@@ -219,46 +221,6 @@
 
 #satvv-preview,#research-projects{scroll-margin-top:104px}
 </style>
-
-<style>
-/* Updated portfolio image assets: keep both project previews cropped cleanly. */
-.project-card.secondary .project-image.robotics-photo {
-  height: auto;
-  aspect-ratio: 1.9 / 1;
-  min-height: 0;
-  overflow: hidden;
-}
-.project-card.secondary .robotics-card-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
-}
-.v3-robot-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
-}
-.satvv-feature-card .satvv-project-image {
-  min-height: 300px;
-  overflow: hidden;
-}
-.satvv-feature-card .satvv-project-image img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
-  object-fit: cover;
-  object-position: center;
-}
-@media (max-width: 760px) {
-  .satvv-feature-card .satvv-project-image,
-  .satvv-feature-card .satvv-project-image img { min-height: 210px; }
-}
-</style>
-
 </head>
  <body>
   <div class="grain">
@@ -547,8 +509,59 @@
       </div>
      </article>
      <article class="project-card secondary">
-      <div class="project-image robotics-art robotics-photo">
-       <img class="robotics-card-image" src="assets/bimanual_robotics_assembly_lab.png" alt="Two robotic arms working together in a laboratory" loading="lazy"/>
+      <div class="project-image robotics-art">
+       <div class="robot-graphic">
+        <svg aria-label="Abstract illustration of dual robotic manipulators" viewbox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+         <defs>
+          <lineargradient id="arm" x1="0" x2="1">
+           <stop stop-color="#73cddc">
+           </stop>
+           <stop offset="1" stop-color="#376caa">
+           </stop>
+          </lineargradient>
+         </defs>
+         <g opacity=".35" stroke="#163854" stroke-width="1">
+          <path d="M0 90H640M0 165H640M0 240H640M0 315H640">
+          </path>
+          <path d="M80 0V420M160 0V420M240 0V420M320 0V420M400 0V420M480 0V420M560 0V420">
+          </path>
+         </g>
+         <g fill="none" stroke="url(#arm)" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M110 355L145 282 228 238 259 152 304 119" stroke-width="36">
+          </path>
+          <path d="M530 355L493 282 416 235 379 150 333 116" stroke-width="36">
+          </path>
+         </g>
+         <g fill="#d9efff" stroke="#13314b" stroke-width="8">
+          <circle cx="145" cy="282" r="23">
+          </circle>
+          <circle cx="228" cy="238" r="20">
+          </circle>
+          <circle cx="259" cy="152" r="19">
+          </circle>
+          <circle cx="493" cy="282" r="23">
+          </circle>
+          <circle cx="416" cy="235" r="20">
+          </circle>
+          <circle cx="379" cy="150" r="19">
+          </circle>
+         </g>
+         <g stroke="#b2e5f1" stroke-linecap="round" stroke-width="10">
+          <path d="M304 119l24-13m-24 13l-4-27m33 24l20-18m-20 18l9 25">
+          </path>
+         </g>
+         <g fill="#8ddbea">
+          <circle cx="320" cy="115" r="5">
+          </circle>
+         </g>
+         <text fill="#8ac5cf" font-family="monospace" font-size="14" x="34" y="43">
+          DUAL-ARM / EMBODIED AI
+         </text>
+         <text fill="#8ac5cf" font-family="monospace" font-size="13" x="412" y="400">
+          CONCEPT VISUAL
+         </text>
+        </svg>
+       </div>
        <div class="image-overlay">
         <span>
          SIEMENS HEALTHINEERS &middot; R&amp;D
@@ -964,7 +977,7 @@
      <span class="disclosure-chips"><span class="disclosure-chip">Franka FR3 Duo</span><span class="disclosure-chip">Vision–Language–Action</span><span class="disclosure-chip">Robot learning</span></span>
      <span class="disclosure-action"><span class="disclosure-action-open">Inside the robotics lab</span><span class="disclosure-action-close">Close this experience</span><span class="disclosure-action-arrow" aria-hidden="true">↗</span></span>
     </span>
-    <span class="disclosure-art" aria-hidden="true"><img src="assets/bimanual_robotics_assembly_lab.png" loading="lazy" alt="Two robotic arms working together in a laboratory"/><span class="disclosure-art-index">02 / EMBODIED AI</span></span>
+    <span class="disclosure-art" aria-hidden="true"><img src="assets/robotics-lab.webp" loading="lazy" alt="Franka bimanual robot in research laboratory"/><span class="disclosure-art-index">02 / EMBODIED AI</span></span>
    </summary>
    <div class="disclosure-content">
 <section class="section wrap robotics-section" id="robotics">
@@ -1014,7 +1027,7 @@ Isaac Sim
       </div>
      </div>
      <div class="v3-robot-photo">
-      <img alt="Two robotic arms working together in a laboratory" loading="lazy" src="assets/bimanual_robotics_assembly_lab.png"/>
+      <img alt="Research laboratory with bimanual robot systems" loading="lazy" src="assets/robotics-lab.webp"/>
       <p>
        Robotics laboratory &middot; Franka manipulation research.
       </p>
@@ -1994,7 +2007,6 @@ Isaac Sim
       </p>
      </div>
      <div class="beyond-card bc4">
-<div class="beyond-card bc4">
       <div class="beyond-icon">
        ♡
       </div>
@@ -2246,7 +2258,7 @@ Isaac Sim
       <span class="disclosure-chips"><span class="disclosure-chip">20 verification procedures</span><span class="disclosure-chip">5 scheduling strategies</span><span class="disclosure-chip">Interactive mission replay</span></span>
       <span class="disclosure-action"><span class="disclosure-action-open">Explore research projects</span><span class="disclosure-action-close">Close research projects</span><span class="disclosure-action-arrow" aria-hidden="true">↗</span></span>
     </span>
-    <span class="disclosure-art" aria-hidden="true"><img src="assets/orbital_telemetry_above_earth.png" loading="lazy" alt="Orbital spacecraft above Earth with telemetry and ground station"/><span class="disclosure-art-index">06 / RESEARCH PROJECTS</span></span>
+    <span class="disclosure-art" aria-hidden="true"><img src="satvv/preview.svg" loading="lazy" alt="Illustration of SAT-V&amp;V conceptual spacecraft and ground station"/><span class="disclosure-art-index">06 / RESEARCH PROJECTS</span></span>
   </summary>
   <div class="disclosure-content">
     <section class="section wrap detail-section" id="research-projects">
@@ -2255,7 +2267,7 @@ Isaac Sim
       <p class="muted-copy">An open engineering research prototype exploring which verification procedure should run next when spacecraft telemetry and diagnostic evidence evolve. Try recorded experiments directly in the browser, including verified failures, early anomaly warnings and a corrected test-selection case.</p>
       <div class="project-grid" style="grid-template-columns:minmax(0,1fr);margin-top:28px">
         <article class="project-card satvv-feature-card">
-          <div class="project-image satvv-project-image"><img src="assets/orbital_telemetry_above_earth.png" loading="lazy" alt="Orbital spacecraft above Earth with telemetry and ground station"/></div>
+          <div class="project-image" style="height:auto;min-height:270px"><img src="satvv/preview.svg" loading="lazy" alt="SAT-V&amp;V illustrated satellite and ground segment" style="height:100%;width:100%;object-fit:cover"/></div>
           <div class="project-info"><div class="project-types"><span>SPACECRAFT SIMULATION</span><span>AI / ML</span><span>VERIFICATION</span></div>
             <h3>Understand what fails. Decide what to test.</h3>
             <p>Replay real recorded synthetic results, inspect subsystem evidence, and explore the difference between early warnings and formally verified requirement failures.</p>
@@ -2337,9 +2349,22 @@ Isaac Sim
 (() => {
  const panels=[...document.querySelectorAll('details.portfolio-disclosure')];
  const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
- panels.forEach(panel => panel.addEventListener('toggle', () => {
-   if (panel.open) panels.forEach(other => { if (other!==panel) other.open=false; });
- }));
+ // Re-align the clicked teaser after the browser finishes changing <details>.
+ // This prevents collapse of another panel from moving the viewport to the footer.
+ function alignPreview(panel, smooth=false) {
+   requestAnimationFrame(() => requestAnimationFrame(() => {
+     const headerHeight=document.querySelector('.header')?.offsetHeight || 0;
+     const top=window.scrollY + panel.getBoundingClientRect().top - headerHeight - 16;
+     window.scrollTo({top:Math.max(0,top),behavior:smooth && !reduceMotion.matches?'smooth':'auto'});
+   }));
+ }
+ panels.forEach(panel => {
+   panel.addEventListener('toggle', () => {
+     if (panel.open) panels.forEach(other => { if (other!==panel) other.open=false; });
+   });
+   // A summary click also fires for Enter / Space keyboard activation.
+   panel.querySelector(':scope > summary')?.addEventListener('click', () => alignPreview(panel));
+ });
  function openMatching(id, doScroll=true) {
    const target=document.getElementById(id);
    if (!target) return false;
@@ -2347,11 +2372,7 @@ Isaac Sim
    if (!panel) return false;
    panels.forEach(other => { if (other!==panel) other.open=false; });
    panel.open=true;
-   if (doScroll) requestAnimationFrame(() => {
-     // Scroll to the teaser, rather than skipping straight past the new preview.
-     const scrollTarget=panel;
-     scrollTarget.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'start'});
-   });
+   if (doScroll) alignPreview(panel, true);
    return true;
  }
  document.addEventListener('click', e => {
